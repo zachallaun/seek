@@ -69,7 +69,7 @@ def main(args):
     (opts, args) = parser.parse_args(args)
    
 
-    if len(args) < 2:
+    if len(args) < 1:
         parser.error("wrong number of arguments")
 
   

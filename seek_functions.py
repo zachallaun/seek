@@ -16,7 +16,6 @@ def search(args, flag = 0):
         search_result = re.search(search_pattern,text_lines[line],flag)
         if search_result:
             result_line = re.sub(search_pattern, highlight, text_lines[line], flags = flag)
-            #key, value = line, text_lines[line]
             key, value = line, result_line
             Found_in_lines[key] = value
     return Found_in_lines, search_pattern
@@ -80,6 +79,17 @@ def recursive_dir(args):
 def synonym_search(args):
     pass
 
+def list_filenames(args):
+    if len(args) == 1:
+        search_directory = os.getcwd() 
+        files = files_in_directory(search_directory,True)
+        print ("Searching " + str(len(files)) + " files...")
+        for x in range (len(files)):
+            args = args[0],files[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results,search_terms,filename = files[x], flag = 1)
+
 
 def files_in_directory(directory_name, subdir, args = None):
     list_of_files = []
@@ -88,7 +98,6 @@ def files_in_directory(directory_name, subdir, args = None):
         for i in files:
             if args == None:
                 list_of_files.append(os.path.join(dirs,i))
-                #listfiles.append('\n'.join([os.path.join(dirs,i) for i in files]))
             else:
                 pass
     return list_of_files
@@ -97,21 +106,23 @@ def files_in_directory(directory_name, subdir, args = None):
 def basic_search(args, flag):
     results, search_terms = search(args, flag)
     search_terms = search_terms.split()
-    if flag == 2:
-        print_results(results, search_terms, ignore_case = 1)
-    else:
-        print_results(results, search_terms, ignore_case = 0)
+    print_results(results, search_terms)
+    
 
 def highlight(matchobj):
     return '\033[92m' + matchobj.group(0) + '\033[0m'
 
 
-def print_results(results, search_terms, filename = None):
+def print_results(results, search_terms, filename = None, flag = 0):
+    
     for key,value in results.iteritems():
             if filename:
-                print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m' + str(value)
+                if flag == 1:
+                    print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m'
+                else:
+                    print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0,' + str(value).strip(' ')                  
             else:
-                print '\n' + '\033[91m' + "(Line " + str(key) + ")" + '\033[0m' + str(value)
+                print '\n' + '\033[91m' + "(Line " + str(key) + ")" + '\033[0m' + str(value).strip(' ')
         
 
 def read_lines_from_file(filename):

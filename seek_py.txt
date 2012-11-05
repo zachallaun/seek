@@ -58,7 +58,7 @@ Seek.py supports the following search options:
 
 -l | --list_filenames: Searches for any files containing search_term in current directory and
 					   returns filenames
-					   EXAMPLE: seek.py -l search_term /path/to/file
+					   EXAMPLE: seek.py -l search_term
 					            seek.py -l search_term *.extension
 
 -y | --synonym_search: Searches for any files containing a match for the search_term and *any* of 
