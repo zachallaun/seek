@@ -54,5 +54,17 @@ Seek.py supports the following search options:
 -r | --recursive_dir:  Searches recursively for any lines containing search_term in files within 						indicated directory.
 					   EXAMPLE: seek.py -r search_term /path/to/directory
 					            seek.py -r search_term *.extension (searches current directory recursively for files with .extension)
+					    (returns filename: line number: line text)
+
+-l | --list_filenames: Searches for any files containing search_term in current directory and
+					   returns filenames
+					   EXAMPLE: seek.py -l search_term /path/to/file
+					            seek.py -l search_term *.extension
+
+-y | --synonym_search: Searches for any files containing a match for the search_term and *any* of 
+					   the synonym words returned from the dictionary API.
+					   EXAMPLE: seek.py -y search_term /parth/to/file
+					            seek.py -y search_term *.extension
+
 
 

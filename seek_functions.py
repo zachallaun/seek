@@ -15,9 +15,10 @@ def search(args, flag = 0):
     for line in range(len(text_lines)):
         search_result = re.search(search_pattern,text_lines[line],flag)
         if search_result:
-            key, value = line, text_lines[line]
+            result_line = re.sub(search_pattern, highlight, text_lines[line], flags = flag)
+            #key, value = line, text_lines[line]
+            key, value = line, result_line
             Found_in_lines[key] = value
-    pdb.set_trace()
     return Found_in_lines, search_pattern
 
 
@@ -26,16 +27,18 @@ def line_starts_with(args):
     regex_arg = args[0]
     regex_arg = '^'+ regex_arg
     args[0] = regex_arg
-    results = search(args)
-    print_results(results)
+    results, search_terms = search(args)
+    search_terms = search_terms.split()
+    print_results(results, search_terms)
     
 def line_ends_with(args):
     
     regex_arg = args[0]
     regex_arg = regex_arg + '$'
     args[0] = regex_arg
-    results = search(args)
-    print_results(results)
+    results, search_terms = search(args)
+    search_terms = search_terms.split()
+    print_results(results, search_terms)
 
 
 def match_whole_word(args):
@@ -43,8 +46,9 @@ def match_whole_word(args):
     regex_arg = args[0]
     regex_arg = '\\b' + regex_arg + '\\b'
     args[0] = regex_arg
-    results = search(args)
-    print_results(results)
+    results, search_terms = search(args)
+    search_terms = search_terms.split()
+    print_results(results, search_terms)
 
     
 #use pattern file
@@ -57,16 +61,27 @@ def pattern_file(args):
     for line in text_lines:
         search_terms.append(line.strip('\n'))
     args[0] = '|'.join(search_terms)
-    results = search(args, return_lines = 1)
-    print_results(results)
+    results, search_terms = search(args)
+    search_terms = search_terms.split('|')
+    unique_terms = list(set(search_terms))
+    print_results(results, unique_terms)
 
 def recursive_dir(args):
     search_directory = args[1]
-    files_in_directory(search_directory,True)
+    files = files_in_directory(search_directory,True)
+    print ("Searching " + str(len(files)) + " files...")
+    for x in range (len(files)):
+        args[1] = files[x]
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results,search_terms,filename = files[x])
+
+
+def synonym_search(args):
+    pass
 
 
 def files_in_directory(directory_name, subdir, args = None):
-    pdb.set_trace()
     list_of_files = []
     listfiles = []
     for dirs, subdirs, files in os.walk(directory_name):
@@ -78,24 +93,26 @@ def files_in_directory(directory_name, subdir, args = None):
                 pass
     return list_of_files
 
+# Performs search with no options and search with -i ignore case option using flag
 def basic_search(args, flag):
     results, search_terms = search(args, flag)
-    formatted_results = highlight(results,search_terms)
-    print_results(formatted_results)
+    search_terms = search_terms.split()
+    if flag == 2:
+        print_results(results, search_terms, ignore_case = 1)
+    else:
+        print_results(results, search_terms, ignore_case = 0)
 
-def print_results(results):
+def highlight(matchobj):
+    return '\033[92m' + matchobj.group(0) + '\033[0m'
 
+
+def print_results(results, search_terms, filename = None):
     for key,value in results.iteritems():
-        print "[Found in line " + str(key) + "]" + str(value)
-
-def highlight(results, search_terms):
-    results = results.replace(search_terms, '\033[92m' + search_terms + '\033[0m')
-    return results
-
-
-#word includes
-def word_contains(args):
-    pass
+            if filename:
+                print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m' + str(value)
+            else:
+                print '\n' + '\033[91m' + "(Line " + str(key) + ")" + '\033[0m' + str(value)
+        
 
 def read_lines_from_file(filename):
 
