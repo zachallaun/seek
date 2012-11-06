@@ -23,7 +23,8 @@ OPTIONS
 Seek.py supports the following search options:
 
 ### -p | --pattern_file :
-Pull search_terms from a file. Search terms must be separated by a newline
+Pull search_terms from a file. Search terms must be separated by a newline:
+
 		seek.py -p path/to/search/file path/to/file
 		seek.py -p words.txt text_file.txt
 		seek,py -p words.txt *.extension
