@@ -74,9 +74,12 @@ def main(args):
         parser.error("wrong number of arguments")
     elif len(args) == 1:
         #Searching in current directory
-        args = args[0], os.getcwd()
+        current_directory = os.getcwd()
+        args = args[0], current_directory.split()
+
     elif len(args) == 2:
         #Search location provided. No need to modify
+        args = args[0], args[1].split()
         pass
     elif len(args) > 2:
         #Search in multiple locations.
@@ -90,7 +93,7 @@ def main(args):
     if opts.pattern_file:
         seek_functions.pattern_file(args)
     elif opts.ignore_case:
-        seek_functions.basic_search(args, flag = 2)
+        seek_functions.basic_search(args, ignore_case_flag = 2)
     elif opts.starts_with:
         seek_functions.starts_with(args)
     elif opts.line_starts_with:
@@ -108,7 +111,7 @@ def main(args):
     elif opts.synonym_search:
         seek_functions.synonym_search(args)
     else: 
-        seek_functions.basic_search(args, flag = 0 )
+        seek_functions.basic_search(args, ignore_case_flag = 0 )
 
 if __name__ == "__main__":
     main(sys.argv[1:])
