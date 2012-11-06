@@ -37,7 +37,7 @@ Performs case-insensitve search.
 					  
 (returns all lines matching search_term, SEARCH_TERM, SearcH_TERm etc. from path/to/file)					  		   
 
-## -S | --starts_with:
+### -S | --starts_with:
 Searches for any lines with words that start with search term.
 
 		seek.py -S ten /path/to/file
@@ -45,13 +45,13 @@ Searches for any lines with words that start with search term.
 
 (returns all lines including words such as tennis, tenure, tent, etc)
 
-## -s | --line_starts_with:
+### -s | --line_starts_with:
 Searches for any lines where the line starts with search term.
 
 		seek.py -s search_term /path/to/file
 		seek.py -s search_term *.extension
 
-## -E | --ends_with:
+### -E | --ends_with:
 Searches for any lines with words that end with search term.
 
 		seek.py -S ted /path/to/file
@@ -59,19 +59,19 @@ Searches for any lines with words that end with search term.
 
 (returns all lines including words such as painted, invited, etc)
 
-## -e | --line_ends_with:
+### -e | --line_ends_with:
 Searches for any lines where the line ends with search term.
 
 		seek.py -s search_term /path/to/file
 		seek.py -s search_term *.extension
 
-## -w | --match_whole_word:
+### -w | --match_whole_word:
 Searches for any lines with words that as a whole match the search_term.
 
 		seek.py -w search_term /path/to/file
 		seek.py -w search_term *.extension
 
-## -r | --recursive_dir:
+### -r | --recursive_dir:
 Searches recursively for any lines containing search_term in files within indicated directory.
 
 		seek.py -r search_term /path/to/directory
@@ -79,13 +79,13 @@ Searches recursively for any lines containing search_term in files within indica
 
 (returns filename: line number: line text)
 
-## -l | --list_filenames:
+### -l | --list_filenames:
 Searches for any files containing search_term in current directory and returns filenames
 
 		seek.py -l search_term
 		seek.py -l search_term *.extension
 
-## -y | --synonym_search:
+### -y | --synonym_search:
 Searches for any files containing a match for the search_term and *any* of the synonym words returned from the dictionary.
 
 		seek.py -y search_term /parth/to/file
