@@ -17,14 +17,18 @@ All searches within multiple files using a wild card (*) return the "file_name :
 Basic search is case-sensitive.
 
 
-- OPTIONS -
+OPTIONS
+-------
 
 Seek.py supports the following search options:
 
--p | --pattern_file : 	Pull search_terms from a file. Search terms must be separated by a newline
-					  	EXAMPLE: seek.py -p path/to/search/file path/to/file
-					  		   	 seek.py -p words.txt text_file.txt
-					  		   	 seek,py -p words.txt *.extension
+### -p | --pattern_file :
+Pull search_terms from a file. Search terms must be separated by a newline
+
+EXAMPLE: 
+	seek.py -p path/to/search/file path/to/file
+	seek.py -p words.txt text_file.txt
+	seek,py -p words.txt *.extension
 
 -i | --ignore_case:   Performs case-insensitve search.
 					  EXAMPLE: seek.py -i search_term path/to/file
