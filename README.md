@@ -1,16 +1,20 @@
-SEEK.py  - README -
+SEEK.py
+=======
 
 Description: A grep-like command utility providing various seach options.
 
-Usage: Seek.py [-o | --options] [search_term] [search_location]
+	Usage: Seek.py [-o | --options] [search_term] [search_location]
 
-EXAMPLE: seek.py seach_term /path/to/file (searches that file only)
-         seek.py "search_term" /path/to/file (same as above)
-         seek.py search_term *.extension  (searches within current directory)
+### EXAMPLE: 
+		seek.py seach_term /path/to/file (searches that file only)
+		seek.py "search_term" /path/to/file (same as above)
+		seek.py search_term *.extension  (searches within current directory)
 
-         NOTE: All searches within multiple files using a wild card (*) return the "file_name : text_line" unless -n option is used. In which case, results will also include line number as: "file_name: line_number: text_line"
+### NOTE: 
 
-         Basic search is case-sensitive.
+All searches within multiple files using a wild card (*) return the "file_name : text_line" unless -n option is used. In which case, results will also include line number as: "file_name: line_number: text_line"
+
+Basic search is case-sensitive.
 
 
 - OPTIONS -
