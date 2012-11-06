@@ -29,50 +29,67 @@ Pull search_terms from a file. Search terms must be separated by a newline:
 		seek.py -p words.txt text_file.txt
 		seek,py -p words.txt *.extension
 
--i | --ignore_case:   Performs case-insensitve search.
-					  EXAMPLE: seek.py -i search_term path/to/file
-					  		   seek.py -i search_term *.extension
+### -i | --ignore_case:   
+Performs case-insensitve search.
+		
+		seek.py -i search_term path/to/file
+		seek.py -i search_term *.extension
 					  
-					  (returns all lines matching search_term, SEARCH_TERM, SearcH_TERm etc. from path/to/file)					  		   
+(returns all lines matching search_term, SEARCH_TERM, SearcH_TERm etc. from path/to/file)					  		   
 
--S | --starts_with:   Searches for any lines with words that start with search term.
-					  EXAMPLE: seek.py -S ten /path/to/file
-					  		   seek.py -S ten *.extension
+## -S | --starts_with:
+Searches for any lines with words that start with search term.
 
-					  (returns all lines including words such as tennis, tenure, tent, etc)
+		seek.py -S ten /path/to/file
+		seek.py -S ten *.extension
 
--s | --line_starts_with: Searches for any lines where the line starts with search term.
-						 EXAMPLE: seek.py -s search_term /path/to/file
-						 		  seek.py -s search_term *.extension
+(returns all lines including words such as tennis, tenure, tent, etc)
 
--E | --ends_with:   Searches for any lines with words that end with search term.
-					EXAMPLE: seek.py -S ted /path/to/file
-					  		 seek.py -S ted *.extension
+## -s | --line_starts_with:
+Searches for any lines where the line starts with search term.
 
-					  (returns all lines including words such as painted, invited, etc)
+		seek.py -s search_term /path/to/file
+		seek.py -s search_term *.extension
 
--e | --line_ends_with: Searches for any lines where the line ends with search term.
-					   EXAMPLE: seek.py -s search_term /path/to/file
-						 		seek.py -s search_term *.extension
+## -E | --ends_with:
+Searches for any lines with words that end with search term.
 
--w | --match_whole_word: Searches for any lines with words that as a whole match the search_term.
-						 EXAMPLE: seek.py -w search_term /path/to/file
-						 		  seek.py -w search_term *.extension
+		seek.py -S ted /path/to/file
+		seek.py -S ted *.extension
 
--r | --recursive_dir:  Searches recursively for any lines containing search_term in files within 						indicated directory.
-					   EXAMPLE: seek.py -r search_term /path/to/directory
-					            seek.py -r search_term *.extension (searches current directory recursively for files with .extension)
-					    (returns filename: line number: line text)
+(returns all lines including words such as painted, invited, etc)
 
--l | --list_filenames: Searches for any files containing search_term in current directory and
-					   returns filenames
-					   EXAMPLE: seek.py -l search_term
-					            seek.py -l search_term *.extension
+## -e | --line_ends_with:
+Searches for any lines where the line ends with search term.
 
--y | --synonym_search: Searches for any files containing a match for the search_term and *any* of 
-					   the synonym words returned from the dictionary API.
-					   EXAMPLE: seek.py -y search_term /parth/to/file
-					            seek.py -y search_term *.extension
+		seek.py -s search_term /path/to/file
+		seek.py -s search_term *.extension
+
+## -w | --match_whole_word:
+Searches for any lines with words that as a whole match the search_term.
+
+		seek.py -w search_term /path/to/file
+		seek.py -w search_term *.extension
+
+## -r | --recursive_dir:
+Searches recursively for any lines containing search_term in files within indicated directory.
+
+		seek.py -r search_term /path/to/directory
+		seek.py -r search_term *.extension (searches current directory recursively for files with .extension)
+
+(returns filename: line number: line text)
+
+## -l | --list_filenames:
+Searches for any files containing search_term in current directory and returns filenames
+
+		seek.py -l search_term
+		seek.py -l search_term *.extension
+
+## -y | --synonym_search:
+Searches for any files containing a match for the search_term and *any* of the synonym words returned from the dictionary.
+
+		seek.py -y search_term /parth/to/file
+		seek.py -y search_term *.extension
 
 
 
