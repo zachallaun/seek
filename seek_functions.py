@@ -23,12 +23,17 @@ def search(args, ignore_case_flag = 0):
     return Found_in_lines, search_pattern
 
 def search_helper(arguments,search_location, ignore_case_flag = 0, print_filename_flag = 0, print_line_flag = 0):
+    if len(search_location) > 1: print_filename_flag = 1
     for x in range (len(search_location)):
         args = arguments, search_location[x]
         results, search_terms = search(args, ignore_case_flag)
-        search_terms = search_terms.split()
+        if search_terms.find("|"):
+            search_terms = search_terms.split('|')
+        else:
+            search_terms = search_terms.split()   
+        unique_terms = list(set(search_terms))
         filename = search_location[x]
-        print_results(results, search_terms, filename, print_filename_flag, print_line_flag)
+        print_results(results, unique_terms, filename, print_filename_flag, print_line_flag)
 
 
 # search options
@@ -58,71 +63,36 @@ def match_whole_word(args):
     
 def list_filenames(args):
     if len(args[1]) == 1:
-        files = files_in_directory(args[1],True)
+        files = files_in_current_directory(args[1])
         print ("Searching " + str(len(files)) + " files...")
-        for x in range(len(files)):
-            search_helper(args[0],files[x].split(), print_filename_flag = 1)
+        search_helper(args[0],files, print_filename_flag = 1)
     elif len(args[1]) > 1:
         search_helper(args[0],args[1], print_filename_flag = 1)
 
-#use pattern file
 def pattern_file(args):
-    pattern_file = args[0]
-    search_location = args[1]
     search_terms = []
-    if len(search_location) == 1:
-        #read pattern file
-        text_lines = read_lines_from_file(pattern_file)
-        for line in text_lines:
-            search_terms.append(line.strip('\n'))
-        args[0] = '|'.join(search_terms)
-        results, search_terms = search(args)
-        search_terms = search_terms.split('|')
-        unique_terms = list(set(search_terms))
-        print_results(results, unique_terms)
-    elif len(search_location) > 1:
-        for x in range (len(search_location)):
-            #read pattern file
-            text_lines = read_lines_from_file(pattern_file)
-            for line in text_lines:
-                search_terms.append(line.strip('\n'))
-            arguments = '|'.join(search_terms)
-            args = arguments, search_location[x]
-            results, search_terms = search(args)
-            search_terms = search_terms.split('|')
-            unique_terms = list(set(search_terms))
-            print_results(results, unique_terms, filename = search_location[x])
+    text_lines = read_lines_from_file(args[0])
+    for line in text_lines:
+        search_terms.append(line.strip('\n'))
+    arguments = '|'.join(search_terms)
+    search_helper(arguments,args[1], print_line_flag = 1)
 
 
 def recursive_dir(args):
-    search_directory = args[1]
-    files = files_in_directory(search_directory,True)
-    print ("Searching " + str(len(files)) + " files...")
-    for x in range (len(files)):
-        args[1] = files[x]
-        results, search_terms = search(args)
-        search_terms = search_terms.split()
-        print_results(results,search_terms,filename = files[x])
+    if len(args[1]) == 1:
+        files = files_in_recursive_directory(args[1])
+        print ("Searching " + str(len(files)) + " files...")
+        search_helper(args[0],files, print_line_flag = 1)
+    elif len(args[1]) > 1:
+        search_helper(args[0],args[1], print_line_flag = 1)
       
 
 def synonym_search(args):
-    search_location = args[1]
     search_word = args[0]
     synonyms = find_synonyms(search_word)
     print "Searching for the following synonym words: " + synonyms.replace('|',',')
-    if len(search_location) == 1:
-        args = synonyms, search_location
-        results, search_terms = search(args)
-        search_terms = search_terms.split('|')
-        unique_terms = list(set(search_terms))
-        print_results(results, unique_terms)
-    elif len(search_location) > 1:
-        for x in range (len(search_location)):
-            args = synonyms, search_location[x]
-            results, search_terms = search(args)
-            search_terms = search_terms.split('|')
-            unique_terms = list(set(search_terms))
-            print_results(results, unique_terms, filename = search_location[x])
+    search_helper(synonyms,args[1], print_line_flag = 1)
+
 
 def find_synonyms(search_word):
     syns = wn.synsets(search_word.lower())
@@ -133,21 +103,27 @@ def find_synonyms(search_word):
     return '|'.join(list(set(syns_list)))
 
 
+# Common Functions
 
-
-
-#Helper Functions
-
-def files_in_directory(directory_name, subdir, args = None):
+def files_in_recursive_directory(directory_name, extension = None):
     list_of_files = []
-    listfiles = []
     for dirs, subdirs, files in os.walk(directory_name[0]):
         for i in files:
-            if args == None:
+            if extension == None:
                 list_of_files.append(os.path.join(dirs,i))
             else:
                 pass
     return list_of_files   
+    
+def files_in_current_directory(directory_name, extension = None):
+    list_of_files = []
+    for item in os.listdir(directory_name[0]):
+            if extension == None:
+                if os.path.isfile(os.path.join(directory_name[0], item)):
+                    list_of_files.append(os.path.join(directory_name[0],item))
+            else:
+                pass
+    return list_of_files
     
 
 def highlight(matchobj):
