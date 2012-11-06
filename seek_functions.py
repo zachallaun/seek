@@ -3,6 +3,8 @@ import pdb
 import os
 import re
 import sys
+import nltk
+from nltk.corpus import wordnet as wn
 from sets import Set
 
 
@@ -146,10 +148,35 @@ def recursive_dir(args):
         results, search_terms = search(args)
         search_terms = search_terms.split()
         print_results(results,search_terms,filename = files[x])
-
+      
 
 def synonym_search(args):
-    pass
+    search_location = args[1]
+    search_word = args[0]
+    synonyms = find_synonyms(search_word)
+    print "Searching for the following synonym words: " + synonyms.replace('|',',')
+    if len(search_location) == 1:
+        args = synonyms, search_location
+        results, search_terms = search(args)
+        search_terms = search_terms.split('|')
+        unique_terms = list(set(search_terms))
+        print_results(results, unique_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = synonyms, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split('|')
+            unique_terms = list(set(search_terms))
+            print_results(results, unique_terms, filename = search_location[x])
+
+def find_synonyms(search_word):
+    syns = wn.synsets(search_word.lower())
+    syns_list = []
+    for s in syns:
+        for l in s.lemmas:
+            syns_list.append(l.name)
+    return '|'.join(list(set(syns_list)))
+
 
 def list_filenames(args):
     
