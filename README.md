@@ -10,12 +10,13 @@ Description: A grep-like command utility providing various seach options.
 		seek.py "search_term" /path/to/file (same as above)
 		seek.py search_term *.extension  (searches within current directory)
 
-### NOTE: 
+### NOTES: 
 
-All searches within multiple files using a wild card (*) return the "file_name : text_line" unless -n option is used. In which case, results will also include line number as: "file_name: line_number: text_line"
+All searches within multiple files using a wild card (*) return the "file_name : line_number: text_line "
 
 Basic search is case-sensitive.
 
+When printing matched text lines, the search terms will be highlighted by default in green.
 
 OPTIONS
 -------
