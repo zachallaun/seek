@@ -23,47 +23,119 @@ def search(args, flag = 0):
 
 def line_starts_with(args):
     
+    search_location = args[1]
     regex_arg = args[0]
     regex_arg = '^'+ regex_arg
-    args[0] = regex_arg
-    results, search_terms = search(args)
-    search_terms = search_terms.split()
-    print_results(results, search_terms)
+    arguments = regex_arg
+    if len(search_location) == 1:
+        args = arguments, search_location
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])
+
+def starts_with(args):
+    
+    search_location = args[1]
+    regex_arg = args[0]
+    regex_arg = '\\b'+ regex_arg + '\\B'
+    arguments = regex_arg
+    if len(search_location) == 1:
+        args = arguments, search_location
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])
+
+def ends_with(args):
+    
+    search_location = args[1]
+    regex_arg = args[0]
+    regex_arg = '\\B' + regex_arg + '\\b'
+    arguments = regex_arg
+    if len(search_location) == 1:
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])
     
 def line_ends_with(args):
     
+    search_location = args[1]
     regex_arg = args[0]
     regex_arg = regex_arg + '$'
-    args[0] = regex_arg
-    results, search_terms = search(args)
-    search_terms = search_terms.split()
-    print_results(results, search_terms)
-
+    arguments = regex_arg
+    if len(search_location) == 1:
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])
 
 def match_whole_word(args):
     
+    search_location = args[1]
     regex_arg = args[0]
     regex_arg = '\\b' + regex_arg + '\\b'
-    args[0] = regex_arg
-    results, search_terms = search(args)
-    search_terms = search_terms.split()
-    print_results(results, search_terms)
-
+    arguments = regex_arg
+    if len(search_location) == 1:
+        results, search_terms = search(args)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])
     
 #use pattern file
 def pattern_file(args):
-    
     pattern_file = args[0]
+    search_location = args[1]
     search_terms = []
-    #read pattern file
-    text_lines = read_lines_from_file(pattern_file)
-    for line in text_lines:
-        search_terms.append(line.strip('\n'))
-    args[0] = '|'.join(search_terms)
-    results, search_terms = search(args)
-    search_terms = search_terms.split('|')
-    unique_terms = list(set(search_terms))
-    print_results(results, unique_terms)
+    if len(search_location) == 1:
+        #read pattern file
+        text_lines = read_lines_from_file(pattern_file)
+        for line in text_lines:
+            search_terms.append(line.strip('\n'))
+        args[0] = '|'.join(search_terms)
+        results, search_terms = search(args)
+        search_terms = search_terms.split('|')
+        unique_terms = list(set(search_terms))
+        print_results(results, unique_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            #read pattern file
+            text_lines = read_lines_from_file(pattern_file)
+            for line in text_lines:
+                search_terms.append(line.strip('\n'))
+            arguments = '|'.join(search_terms)
+            args = arguments, search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split('|')
+            unique_terms = list(set(search_terms))
+            print_results(results, unique_terms, filename = search_location[x])
+
 
 def recursive_dir(args):
     search_directory = args[1]
@@ -80,8 +152,11 @@ def synonym_search(args):
     pass
 
 def list_filenames(args):
-    if len(args) == 1:
-        search_directory = os.getcwd() 
+    
+    search_location = args[1]
+    if len(search_location) == 1:
+        # search is in current directory
+        search_directory = search_location
         files = files_in_directory(search_directory,True)
         print ("Searching " + str(len(files)) + " files...")
         for x in range (len(files)):
@@ -89,6 +164,13 @@ def list_filenames(args):
             results, search_terms = search(args)
             search_terms = search_terms.split()
             print_results(results,search_terms,filename = files[x], flag = 1)
+    elif len(search_location) > 1:
+        # multiple search locations
+        for x in range (len(search_location)):
+            args = args[0], search_location[x]
+            results, search_terms = search(args)
+            search_terms = search_terms.split()
+            print_results(results,search_terms,filename = search_location[x], flag = 1)
 
 
 def files_in_directory(directory_name, subdir, args = None):
@@ -104,9 +186,17 @@ def files_in_directory(directory_name, subdir, args = None):
 
 # Performs search with no options and search with -i ignore case option using flag
 def basic_search(args, flag):
-    results, search_terms = search(args, flag)
-    search_terms = search_terms.split()
-    print_results(results, search_terms)
+    search_location = args[1]
+    if len(search_location) == 1:
+        results, search_terms = search(args, flag)
+        search_terms = search_terms.split()
+        print_results(results, search_terms)
+    elif len(search_location) > 1:
+        for x in range (len(search_location)):
+            args = args[0], search_location[x]
+            results, search_terms = search(args, flag)
+            search_terms = search_terms.split()
+            print_results(results, search_terms, filename = search_location[x])    
     
 
 def highlight(matchobj):
@@ -120,7 +210,7 @@ def print_results(results, search_terms, filename = None, flag = 0):
                 if flag == 1:
                     print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m'
                 else:
-                    print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0,' + str(value).strip(' ')                  
+                    print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m' + str(value).strip(' ')                  
             else:
                 print '\n' + '\033[91m' + "(Line " + str(key) + ")" + '\033[0m' + str(value).strip(' ')
         

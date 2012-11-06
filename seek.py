@@ -9,6 +9,7 @@ import optparse
 import sys
 import seek_functions
 import pdb
+import os
 
 def main(args):
     parser = optparse.OptionParser("""\nUsage: %prog [--options] [pattern] [source] [symbol] [destination]""")
@@ -68,9 +69,22 @@ def main(args):
 
     (opts, args) = parser.parse_args(args)
    
-
+    
     if len(args) < 1:
         parser.error("wrong number of arguments")
+    elif len(args) == 1:
+        #Searching in current directory
+        args = args[0], os.getcwd()
+    elif len(args) == 2:
+        #Search location provided. No need to modify
+        pass
+    elif len(args) > 2:
+        #Search in multiple locations.
+        locations = []
+        for x in range(1,len(args)):
+          locations.append(args[x])
+        args = args[0],locations
+
 
   
     if opts.pattern_file:
