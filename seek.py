@@ -1,18 +1,18 @@
-####### Seek ########
-# A command line tool written in Python similar to grep.
-# 
-# search for specific string in file
-# seek <string> <filename>
-#                                                            #
-##############################################################
-import optparse
-import sys
-import seek_functions
-import pdb
+''' Seek 
+ A command line tool written in Python similar to grep.
+ 
+ search for specific string in file
+ seek <string> <filename>
+'''
 import os
+import sys
+
+import optparse
+
+import seek_functions
 
 def main(args):
-    parser = optparse.OptionParser("""\nUsage: %prog [--options] [pattern] [source] [symbol] [destination]""")
+    parser = optparse.OptionParser('\nUsage: %prog [--options] [pattern] [source] [symbol] [destination]')
 
    
     parser.add_option("-p","--pattern_file",
@@ -66,21 +66,17 @@ def main(args):
                       default=False,
                       help="Searches for any files containing a match for the search_term and *any* of the synonym words returned from the dictionary API")
 
-
     (opts, args) = parser.parse_args(args)
    
-    
     if len(args) < 1:
         parser.error("wrong number of arguments")
     elif len(args) == 1:
         #Searching in current directory
         current_directory = os.getcwd()
         args = args[0], current_directory.split()
-
     elif len(args) == 2:
         #Search location provided. No need to modify
         args = args[0], args[1].split()
-
     elif len(args) > 2:
         #Search in multiple locations.
         locations = []
@@ -88,12 +84,11 @@ def main(args):
           locations.append(args[x])
         args = args[0],locations
 
-
   
     if opts.pattern_file:
         seek_functions.pattern_file(args)
     elif opts.ignore_case:
-        seek_functions.basic_search(args, ignore_case = 2)
+        seek_functions.basic_search(args, ignore_case=True)
     elif opts.starts_with:
         seek_functions.starts_with(args)
     elif opts.line_starts_with:
@@ -111,7 +106,7 @@ def main(args):
     elif opts.synonym_search:
         seek_functions.synonym_search(args)
     else: 
-        seek_functions.basic_search(args, ignore_case = 0 )
+        seek_functions.basic_search(args, ignore_case=False)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
