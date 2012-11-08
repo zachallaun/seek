@@ -3,7 +3,7 @@ import os
 import re
 import sys
 
-
+import nltk
 from nltk.corpus import wordnet as wn
 
 # search
@@ -44,7 +44,6 @@ def search_helper(arguments, search_location, ignore_case=False, print_filename=
 # search options
 
 def basic_search((pattern,location), ignore_case=False):
-    pdb.set_trace()
     search_helper(pattern, location, ignore_case, print_line=1)
 
 def line_starts_with((pattern,location)):
@@ -79,7 +78,7 @@ def pattern_file((pattern,location)):
     search_helper(arguments,location, print_line=1)
 
 
-def recursive_dir(a(pattern,location)):
+def recursive_dir((pattern,location)):
     
     if len(location) == 1:
         files = files_in_recursive_directory(location)
