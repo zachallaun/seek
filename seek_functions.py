@@ -23,7 +23,7 @@ def search(args, ignore_case=False):
 def search_helper(arguments, search_location, ignore_case=False, print_filename=0, print_line=0):
     if search_location == [os.getcwd()]:
         # Right now, we only support a single location
-        search_location = files_in_current_directory(search_location[0])
+        search_location = files_in_directory(search_location[0])
 
     if len(search_location) > 1:
         print_filename = 1
@@ -78,12 +78,13 @@ def pattern_file((pattern, location)):
 
 def recursive_dir((pattern, location)):
     if len(location) == 1:
-        files = files_in_recursive_directory(location[0])
+        files = files_in_directory(location[0], recursive=True)
         search_helper(pattern, files, print_line=1)
     elif len(location) > 1:
         # Assumes filename wildcard to use in recursive search
         file_extension = find_file_extension(location)
-        files = files_in_recursive_directory(os.getcwd(), extension=file_extension)
+        files = files_in_directory(os.getcwd(), extension=file_extension,
+                                   recursive=True)
         search_helper(pattern, files, print_line=1)
 
 
@@ -108,23 +109,14 @@ def find_file_extension(filenames):
     filename, extension = os.path.splitext(filenames[0])
     return extension
 
-def files_in_recursive_directory(directory_name, extension=None):
-    list_of_files = []
-    for dirs, subdirs, files in os.walk(directory_name):
-        for i in files:
-            if extension == None or i.endswith(extension):
-                list_of_files.append(os.path.join(dirs, i))
-    return list_of_files
 
-def files_in_current_directory(directory_name, extension=None):
-    list_of_files = []
-    for item in os.listdir(directory_name):
-        if extension == None:
-            if os.path.isfile(os.path.join(directory_name, item)):
-                list_of_files.append(os.path.join(directory_name, item))
-        else:
-            pass #Need to implement in case we search for specific files in current dir
-    return list_of_files
+def files_in_directory(dir_name, extension=None, recursive=False):
+    if recursive:
+        files = (os.path.join(directory, f) for directory, _, files in os.walk(dir_name) for f in files)
+    else:
+        files = os.listdir(dir_name)
+
+    return [f for f in files if not extension or f.endswith(extension)]
 
 
 def highlight(matchobj):
