@@ -3,9 +3,6 @@ import os
 import re
 import sys
 
-import nltk
-from nltk.corpus import wordnet as wn
-
 
 # search
 def search(args, ignore_case=False):
