@@ -115,11 +115,8 @@ def files_in_recursive_directory(directory_name, extension=None):
     list_of_files = []
     for dirs, subdirs, files in os.walk(directory_name):
         for i in files:
-            if extension == None:
+            if extension == None or i.endswith(extension):
                 list_of_files.append(os.path.join(dirs, i))
-            else:
-                if i.endswith(extension) == True:
-                    list_of_files.append(os.path.join(dirs, i))
     return list_of_files
 
 def files_in_current_directory(directory_name, extension=None):
