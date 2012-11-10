@@ -66,12 +66,9 @@ def match_whole_word((pattern, location)):
 def list_filenames((pattern, location)):
     search_helper(pattern, location, print_filename=1)
 
+
 def pattern_file((pattern, location)):
-    search_terms = []
-    text_lines = read_lines_from_file(pattern)
-    for line in text_lines:
-        search_terms.append(line.strip('\n'))
-    arguments = '|'.join(search_terms)
+    arguments = '|'.join(line.strip('\n') for line in read_lines_from(pattern))
     search_helper(arguments, location, print_line=1)
 
 
