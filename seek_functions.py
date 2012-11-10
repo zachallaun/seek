@@ -39,41 +39,19 @@ def search_helper(arguments, search_location, ignore_case=False, print_filename=
 
 
 # search options
-def searchfn(print_line=1, print_filename=0):
-    def wrap(fn):
-        def searcher((pattern, location), ignore_case=False):
-            search_helper(fn(pattern), location, ignore_case=ignore_case,
-                            print_line=print_line, print_filename=print_filename)
-        return searcher
-    return wrap
+def searchfn(fn, print_line=1, print_filename=0):
+    def searcher((pattern, location), ignore_case=False):
+        search_helper(fn(pattern), location, ignore_case=ignore_case,
+                        print_line=print_line, print_filename=print_filename)
+    return searcher
 
-@searchfn()
-def basic_search(pattern):
-    return pattern
-
-@searchfn()
-def line_starts_with(pattern):
-    return '^' + pattern
-
-@searchfn()
-def starts_with(pattern):
-    return r'\b' + pattern + r'\B'
-
-@searchfn()
-def ends_with(pattern):
-    return r'\B' + pattern + r'\b'
-
-@searchfn()
-def line_ends_with(pattern):
-    return pattern + '$'
-
-@searchfn()
-def match_whole_word(pattern):
-    return r'\b' + pattern + r'\b'
-
-@searchfn(print_line=0, print_filename=1)
-def list_filenames(pattern):
-    return pattern
+basic_search        = searchfn(lambda p: p)
+line_starts_with    = searchfn(lambda p: '^' + p)
+starts_with         = searchfn(lambda p: r'\b' + p + r'\B')
+ends_with           = searchfn(lambda p: r'\B' + pattern + r'\b')
+line_ends_with      = searchfn(lambda p: p + '$')
+match_whole_word    = searchfn(lambda p: r'\b' + p + r'\b')
+list_filenames      = searchfn(lambda p: p, print_line=0, print_filename=1)
 
 
 def pattern_file((pattern, location)):
