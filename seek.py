@@ -84,6 +84,7 @@ def main(args):
             locations.append(args[x])
         args = args[0], locations
 
+    # TODO: find a way to set multiple options
     if opts.pattern_file:
         seek_functions.pattern_file(args)
     elif opts.ignore_case:
