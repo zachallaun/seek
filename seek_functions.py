@@ -39,32 +39,41 @@ def search_helper(arguments, search_location, ignore_case=False, print_filename=
 
 
 # search options
+def searchfn(print_line=1, print_filename=0):
+    def wrap(fn):
+        def searcher((pattern, location), ignore_case=False):
+            search_helper(fn(pattern), location, ignore_case=ignore_case,
+                            print_line=print_line, print_filename=print_filename)
+        return searcher
+    return wrap
 
-def basic_search((pattern, location), ignore_case=False):
-    search_helper(pattern, location, ignore_case, print_line=1)
+@searchfn()
+def basic_search(pattern):
+    return pattern
 
-def line_starts_with((pattern, location)):
-    search_arg = '^' + pattern
-    search_helper(search_arg, location, print_line=1)
+@searchfn()
+def line_starts_with(pattern):
+    return '^' + pattern
 
-def starts_with((pattern, location)):
-    search_arg = '\\b' + pattern + '\\B'
-    search_helper(search_arg, location, print_line=1)
+@searchfn()
+def starts_with(pattern):
+    return r'\b' + pattern + r'\B'
 
-def ends_with((pattern, location)):
-    search_arg = '\\B' + pattern + '\\b'
-    search_helper(search_arg, location, print_line=1)
+@searchfn()
+def ends_with(pattern):
+    return r'\B' + pattern + r'\b'
 
-def line_ends_with((pattern, location)):
-    search_arg = pattern + '$'
-    search_helper(search_arg, location, print_line=1)
+@searchfn()
+def line_ends_with(pattern):
+    return pattern + '$'
 
-def match_whole_word((pattern, location)):
-    search_arg = '\\b' + pattern + '\\b'
-    search_helper(search_arg, location, print_line=1)
+@searchfn()
+def match_whole_word(pattern):
+    return r'\b' + pattern + r'\b'
 
-def list_filenames((pattern, location)):
-    search_helper(pattern, location, print_filename=1)
+@searchfn(print_line=0, print_filename=1)
+def list_filenames(pattern):
+    return pattern
 
 
 def pattern_file((pattern, location)):
