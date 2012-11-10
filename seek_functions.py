@@ -123,14 +123,25 @@ def highlight(matchobj):
     return '\033[92m' + matchobj.group(0) + '\033[0m'
 
 
-def print_results(results, search_terms, filename=None, print_filename=0, print_line=0):
-    for key, value in results.iteritems():
-        if print_filename == 1 and print_line == 1:
-            print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m' + str(value).strip(' ')
-        elif print_filename == 1 and print_line == 0:
-            print '\n' + '\033[94m' + filename + '\033[0m' + '\033[91m' + " (Line " + str(key) + ")" + '\033[0m'
-        else:
-            print '\n' + '\033[91m' + "(Line " + str(key) + ")" + '\033[0m' + str(value).strip(' ')
+def format_line_no(no):
+    return "\033[91m (Line {}) \033[0m".format(no)
+
+
+def format_filename(filename):
+    return "\033[94m{}\033[0m".format(filename)
+
+
+def format_line(line):
+    return str(line).strip(" ")
+
+
+def print_results(results, search_terms, filename, print_filename=False, print_line=False):
+    for line_no, line in results.iteritems():
+        output = '\n'
+        output += format_filename(filename) if print_filename else ""
+        output += format_line_no(line_no) if print_line else ""
+        output += format_line(line)
+        print output
 
 
 def read_lines_from_file(filename):
