@@ -77,14 +77,14 @@ def pattern_file((pattern, location)):
 
 def recursive_dir((pattern, location)):
     if len(location) == 1:
-        files = files_in_directory(location[0], recursive=True)
-        search_helper(pattern, files, print_line=1)
-    elif len(location) > 1:
-        # Assumes filename wildcard to use in recursive search
-        file_extension = find_file_extension(location)
-        files = files_in_directory(os.getcwd(), extension=file_extension,
-                                   recursive=True)
-        search_helper(pattern, files, print_line=1)
+        search_dir = location[0]
+        extension = None
+    else:
+        search_dir = os.getcwd()
+        extension = find_file_extension(location)
+
+    files = files_in_directory(search_dir, extension=extension, recursive=True)
+    search_helper(pattern, files, print_line=1)
 
 
 def synonym_search((pattern, location)):
