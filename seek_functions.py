@@ -3,7 +3,6 @@ import os
 import re
 import sys
 
-
 # search
 def search(args, ignore_case=False):
     regex_flags = 0
@@ -95,12 +94,13 @@ def synonym_search((pattern, location)):
 
 
 def find_synonyms(search_word):
-    syns = wn.synsets(search_word.lower())
-    syns_list = []
-    for s in syns:
-        for l in s.lemmas:
-            syns_list.append(l.name)
-    return '|'.join(list(set(syns_list)))
+    return ""
+    #syns = wordnet.synsets(search_word.lower())
+    #syns_list = []
+    #for s in syns:
+    #    for l in s.lemmas:
+    #        syns_list.append(l.name)
+    #return '|'.join(list(set(syns_list)))
 
 
 # Common Functions
