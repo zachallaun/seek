@@ -4,37 +4,35 @@ import re
 import sys
 
 # search
-def search(args, ignore_case=False):
+def search((pattern, location), ignore_case=False):
     regex_flags = 0
     if ignore_case:
         regex_flags += re.IGNORECASE
     Found_in_lines = {}
-    search_pattern = args[0]
-    text_lines = read_lines_from_file(args[1])
-    for line in range(len(text_lines)):
-        search_result = re.search(search_pattern, text_lines[line], regex_flags)
-        if search_result:
-            result_line = re.sub(search_pattern, highlight, text_lines[line], flags=regex_flags)
-            key, value = line, result_line
-            Found_in_lines[key] = value
-    return Found_in_lines, search_pattern
+    text_lines = read_lines_from_file(location)
+    for line_no, line in enumerate(text_lines):
+        if re.search(pattern, line, regex_flags):
+            result_line = re.sub(pattern, highlight, line, flags=regex_flags)
+            Found_in_lines[line_no] = result_line
+    return Found_in_lines, pattern
 
-def search_helper(arguments, search_location, ignore_case=False, print_filename=0, print_line=0):
-    if search_location == [os.getcwd()]:
+def search_helper(arguments, location, ignore_case=False, print_filename=0, print_line=0):
+    if location == [os.getcwd()]:
         # Right now, we only support a single location
-        search_location = files_in_directory(search_location[0])
+        location = files_in_directory(location[0])
 
-    if len(search_location) > 1:
+    if len(location) > 1:
         print_filename = 1
-    for x in range(len(search_location)):
-        args = arguments, search_location[x]
-        results, search_terms = search(args, ignore_case)
+
+    for x in range(len(location)):
+        results, search_terms = search((arguments, location[x]), ignore_case)
+        # Would we ever want to split on whitespace?
         if search_terms.find("|"):
             search_terms = search_terms.split('|')
         else:
             search_terms = search_terms.split()
         unique_terms = list(set(search_terms))
-        filename = search_location[x]
+        filename = location[x]
         print_results(results, unique_terms, filename, print_filename, print_line)
 
 
