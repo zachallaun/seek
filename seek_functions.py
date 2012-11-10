@@ -146,14 +146,8 @@ def print_results(results, search_terms, filename, print_filename=False, print_l
 
 def read_lines_from_file(filename):
     try:
-        file = open(filename, 'r')
-        lines = file.readlines()
-        return lines
-    except IOError:
-        current_directory = os.getcwd()
-        try:
-            file = open(filename, 'r')
-            lines = file.readlines()
-            return lines
-        except:
-            print("Error while opening file")
+        with open(filename, "r") as file:
+            return file.readlines()
+    except IOError as e:
+        print "\033[91mError while opening file\033[0m"
+        raise e
