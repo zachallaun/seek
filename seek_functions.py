@@ -24,16 +24,15 @@ def search_helper(arguments, location, ignore_case=False, print_filename=0, prin
     if len(location) > 1:
         print_filename = 1
 
-    for x in range(len(location)):
-        results, search_terms = search((arguments, location[x]), ignore_case)
+    for loc in location:
+        results, search_terms = search((arguments, loc), ignore_case)
         # Would we ever want to split on whitespace?
         if search_terms.find("|"):
             search_terms = search_terms.split('|')
         else:
             search_terms = search_terms.split()
         unique_terms = list(set(search_terms))
-        filename = location[x]
-        print_results(results, unique_terms, filename, print_filename, print_line)
+        print_results(results, unique_terms, loc, print_filename, print_line)
 
 
 # search options
